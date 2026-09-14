@@ -77,7 +77,7 @@ func (c *Client) do(req *http.Request) ([]byte, error) {
 	}
 
 	if resp.StatusCode == 401 {
-		return nil, fmt.Errorf("unauthorized — run `splitwise auth` to re-authenticate")
+		return nil, fmt.Errorf("unauthorized — run `splitwise auth` to re-authenticate or set SPLITWISE_API_KEY")
 	}
 	if resp.StatusCode == 403 {
 		return nil, fmt.Errorf("forbidden — you don't have access to this resource")

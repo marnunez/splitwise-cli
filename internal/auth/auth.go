@@ -114,9 +114,13 @@ func Login(clientID, clientSecret string) error {
 
 // LoadToken returns a valid token, refreshing if needed.
 func LoadToken() (string, error) {
+	if apiKey := os.Getenv("SPLITWISE_API_KEY"); apiKey != "" {
+		return apiKey, nil
+	}
+
 	stored, err := loadAuth()
 	if err != nil {
-		return "", fmt.Errorf("not logged in — run `splitwise auth` first")
+		return "", fmt.Errorf("not logged in — run `splitwise auth` first or set SPLITWISE_API_KEY")
 	}
 
 	if stored.Token.Valid() {
@@ -128,7 +132,7 @@ func LoadToken() (string, error) {
 	src := cfg.TokenSource(context.Background(), stored.Token)
 	newToken, err := src.Token()
 	if err != nil {
-		return "", fmt.Errorf("token expired and refresh failed — run `splitwise auth` again: %w", err)
+		return "", fmt.Errorf("token expired and refresh failed — run `splitwise auth` again or set SPLITWISE_API_KEY: %w", err)
 	}
 
 	stored.Token = newToken
@@ -141,6 +145,9 @@ func LoadToken() (string, error) {
 
 // IsLoggedIn checks if credentials exist.
 func IsLoggedIn() bool {
+	if os.Getenv("SPLITWISE_API_KEY") != "" {
+		return true
+	}
 	_, err := loadAuth()
 	return err == nil
 }

@@ -31,6 +31,12 @@ You'll be prompted for your Client ID and Client Secret. The CLI opens your brow
 
 > **Note:** Splitwise ignores `redirect_uri` in OAuth requests and always uses the registered callback URL. If you hit `ERR_CONNECTION_REFUSED` after authorizing, do a manual token exchange with `curl` using the `code` from the URL.
 
+Alternatively, you can skip the OAuth flow by setting the `SPLITWISE_API_KEY` environment variable with an API key generated from [secure.splitwise.com/apps](https://secure.splitwise.com/apps):
+
+```bash
+export SPLITWISE_API_KEY="your_api_key_here"
+```
+
 ## Usage
 
 ```bash
@@ -87,8 +93,9 @@ This CLI ships with an [OpenClaw](https://github.com/openclaw/openclaw) / [Gemin
 
 ## Configuration
 
-| File | Purpose |
-|------|---------|
+| File/Variable | Purpose |
+|---------------|---------|
+| `SPLITWISE_API_KEY` | Environment variable for API key (bypasses OAuth) |
 | `~/.config/splitwise-cli/auth.json` | OAuth token |
 | `~/.config/splitwise-cli/config.json` | User preferences |
 
