@@ -66,6 +66,9 @@ splitwise expenses create "Dinner" 120.00 --group "Trip"
 
 # Different currency
 splitwise expenses create "Dinner on Trip" 45.00 --group "Trip" --currency EUR
+
+# With a category
+splitwise expenses create "Groceries" 87.50 --category 18
 ```
 
 ### Other commands
@@ -74,6 +77,7 @@ splitwise me                          # Current user info
 splitwise groups                      # List all groups
 splitwise group "Household"           # Group details + member balances
 splitwise friends                     # List friends
+splitwise categories                  # List all categories with their id, name, and subcategories
 splitwise settle "MemberB"            # Record a settlement
 splitwise expenses delete 12345       # Delete an expense by ID
 ```
@@ -114,6 +118,7 @@ Run multiple `splitwise expenses create` commands in sequence. No special syntax
 - Group/friend names use case-insensitive partial matching
 - A configured default group means `--group` is optional
 - Amounts are USD by default (configurable via `splitwise config set default_currency`)
+- You can categorize an expense using the `--category <category_id>` flag. If the user provides enough context, make an effort to find and use an appropriate category by checking `splitwise categories`.
 - `--split even` is the default — expense split equally among all group members
 - `--split "exact:Name:Amount,Name:Amount"` — custom per-person split (amounts must sum to total)
 - The `--paid-by` flag defaults to the authenticated user

@@ -198,8 +198,9 @@ type ExpenseShare struct {
 }
 
 type Category struct {
-	ID   int    `json:"id"`
-	Name string `json:"name"`
+	ID            int        `json:"id"`
+	Name          string     `json:"name"`
+	Subcategories []Category `json:"subcategories,omitempty"`
 }
 
 // ---------- API Methods ----------
@@ -264,6 +265,21 @@ func (c *Client) GetFriends() ([]Friend, error) {
 	return resp.Friends, nil
 }
 
+// GetCategories returns all available expense categories.
+func (c *Client) GetCategories() ([]Category, error) {
+	data, err := c.get("/get_categories", nil)
+	if err != nil {
+		return nil, err
+	}
+	var resp struct {
+		Categories []Category `json:"categories"`
+	}
+	if err := json.Unmarshal(data, &resp); err != nil {
+		return nil, fmt.Errorf("failed to parse response: %w", err)
+	}
+	return resp.Categories, nil
+}
+
 // GetExpensesParams holds query parameters for listing expenses.
 type GetExpensesParams struct {
 	GroupID     int64
@@ -316,6 +332,7 @@ type CreateExpenseParams struct {
 	GroupID      int64
 	SplitEqually bool
 	Date         string
+	CategoryID   int
 	// For by-shares split: user_id -> {paid_share, owed_share}
 	Shares []ShareParam
 }
@@ -336,6 +353,9 @@ func (c *Client) CreateExpense(p CreateExpenseParams) (*Expense, error) {
 	}
 	if p.Date != "" {
 		params.Set("date", p.Date)
+	}
+	if p.CategoryID > 0 {
+		params.Set("category_id", fmt.Sprintf("%d", p.CategoryID))
 	}
 
 	if p.SplitEqually {

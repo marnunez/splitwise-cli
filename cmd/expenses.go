@@ -113,6 +113,7 @@ var expensesCreateCmd = &cobra.Command{
 		split, _ := cmd.Flags().GetString("split")
 		currency, _ := cmd.Flags().GetString("currency")
 		paidBy, _ := cmd.Flags().GetString("paid-by")
+		category, _ := cmd.Flags().GetInt("category")
 
 		// Resolve defaults.
 		cfg, _ := config.Load()
@@ -137,6 +138,7 @@ var expensesCreateCmd = &cobra.Command{
 			Cost:         cost,
 			CurrencyCode: currency,
 			GroupID:      group.ID,
+			CategoryID:   category,
 		}
 
 		if split == "" || split == "even" {
@@ -277,6 +279,7 @@ func init() {
 	expensesCreateCmd.Flags().String("split", "even", `Split type: even, or exact:Name:Amount,Name:Amount (e.g. "exact:MemberA:60,MemberB:40")`)
 	expensesCreateCmd.Flags().String("paid-by", "", "Who paid (name, defaults to you)")
 	expensesCreateCmd.Flags().StringP("currency", "c", "", "Currency code (e.g. USD)")
+	expensesCreateCmd.Flags().Int("category", 0, "Category ID for the expense")
 
 	expensesCmd.AddCommand(expensesListCmd)
 	expensesCmd.AddCommand(expensesCreateCmd)
