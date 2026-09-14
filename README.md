@@ -47,6 +47,11 @@ splitwise expenses list --after 2025-01-01
 splitwise expenses create "Dinner" 85.50 --group "Household"
 splitwise expenses delete 123456
 
+# Categories (use an ID returned by the categories command)
+splitwise categories
+splitwise categories --json
+splitwise expenses create "Groceries" 87.50 --group "Household" --category 18
+
 # Balances
 splitwise balances
 splitwise balances --group "Household"
